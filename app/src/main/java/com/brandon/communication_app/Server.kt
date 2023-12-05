@@ -27,9 +27,14 @@ fun main() {
             // HEADER
             printer.println("HTTP/1.1 200 OK")
             printer.println("Content-Type: text/html\r\n")
+            printer.println("<h1>Hello World Keunyoung</h1>")
+            printer.println("\r\n")
+            printer.flush()
 
+            printer.close()
 
             reader.close()
+
             socket.close()
         }
 
