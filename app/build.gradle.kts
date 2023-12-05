@@ -42,6 +42,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // okhttp
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    // gson
+    implementation ("com.google.code.gson:gson:2.10.1")
 
 
 

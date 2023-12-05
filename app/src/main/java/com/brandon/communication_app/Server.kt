@@ -27,7 +27,9 @@ fun main() {
             // HEADER
             printer.println("HTTP/1.1 200 OK")
             printer.println("Content-Type: text/html\r\n")
-            printer.println("<h1>Hello World Keunyoung</h1>")
+
+            // BODY
+            printer.println("{\"message\":\"Hello keunyoung\"}")
             printer.println("\r\n")
             printer.flush()
 
