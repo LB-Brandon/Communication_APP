@@ -6,48 +6,43 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.net.ServerSocket
+import java.net.Socket
 
 class MainActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 네트워크 동작은 main 스레드에서 수행될 경우 block이 걸려
-        // Main thread exeception 발생
+
+        // Write -> Read
         Thread {
-            val port = 8080
-            // Waiting for accept
-            val server = ServerSocket(port)
+            try {
+//            val socket = Socket("192.168.0.6", 8080)
+                val socket = Socket("10.0.2.2", 8080) // 에뮬레이터 localhost ip
+                val printer = PrintWriter(socket.getOutputStream())
+                val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
 
-            val socket = server.accept()
+                printer.println("GET /HTTP/1.1")
+                printer.println("Host: 127.0.0.1:8080")
+                printer.println("User-Agent: android")
+                printer.println("\r\n")
+                printer.flush()
 
-            // Client to Server
-            socket.getInputStream()
-            // Server to Client
-            socket.getOutputStream()
 
-            // inputStream 을 Buffer 에 담는다
-            val reader = BufferedReader(InputStreamReader(socket.getInputStream()))
-            val printer = PrintWriter(socket.getOutputStream())
+                var input: String? = "-1"
+                while (input != null) {
+                    input = reader.readLine()
+                    Log.e("Client", "$input")
+                }
 
-            var input: String? = "-1"
-            // BufferedReader 로 부터 데이터 한 줄씩 읽기
-            while (input != null && input != "") {
-                input = reader.readLine()
+                reader.close()
+                printer.close()
+                socket.close()
+            } catch (e: Exception) {
+                Log.e("Client", e.toString())
             }
-
-            Log.e("SERVER", "READ DATA $input")
-
-            printer.println("HTTP/1.1 200 OK")
-            printer.println("Content-Type: text/html\r\n")
-            printer.println("<h1>Hello World</h1>")
-            printer.println("\r\b")
-            printer.flush()
-
-            printer.close()
-            reader.close()
-            socket.close()
         }.start()
 
     }
